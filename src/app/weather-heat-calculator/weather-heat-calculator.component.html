@@ -1,0 +1,43 @@
+<form [formGroup]="calculatorForm" class="calculator-form">
+  <mat-form-field class="form-field temp-field">
+    <input matInput placeholder="Temperature" formControlName="temperature" />
+    <mat-error *ngIf="temperature.hasError('required')">
+      Value is required
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field class="form-field unit-field">
+    <mat-select formControlName="unit">
+      <mat-option *ngFor="let unit of units" [value]="unit.value">{{
+        unit.name
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="form-field humidity-field">
+    <input matInput placeholder="Humadity" formControlName="humidity" />
+    <mat-error *ngIf="humidity.hasError('required')">
+      Value is required
+    </mat-error>
+    <mat-error *ngIf="humidity.hasError('max') || humidity.hasError('min')">
+      Value have to be between 0 - 100
+    </mat-error>
+    <div matSuffix>%</div>
+  </mat-form-field>
+
+  <div class="form-field button-field">
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="calculate()"
+      [disabled]="!calculatorForm.valid"
+    >
+      Calculate
+    </button>
+  </div>
+  <mat-error
+    class="temp-range-error"
+    *ngIf="calculatorForm.hasError('temperatureRange')"
+  >
+    Value cannot be less than 26.7 °C or 80 °F
+  </mat-error>
+</form>
+<div class="result">Result: {{ result | number: "0.1-2" }}</div>
